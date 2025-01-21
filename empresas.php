@@ -1,6 +1,8 @@
 <?php 
 // Inicia a sessão para verificar informações do usuário logado
 session_start();
+include "db_conn.php";
+
 $logged = false; // Variável para indicar se o usuário está logado
 
 // Verifica se as variáveis de sessão do usuário estão definidas
@@ -11,6 +13,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 
 // Variável para indicar se resultados de busca não foram encontrados
 $notFound = 0;
+
+// Buscar empresas do banco de dados
+$sql = "SELECT * FROM companies ORDER BY name";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -143,16 +151,8 @@ $notFound = 0;
     <!-- Importando o Bootstrap JS e suas dependências -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const companies = [
-            { name: "Empresa Exemplo 1", cnpj: "12.345.678/0001-99", category: "Indústria", size: "Grande" },
-            { name: "Comércio Exemplo 2", cnpj: "23.456.789/0001-11", category: "Comércio", size: "Média" },
-            { name: "Serviços Exemplo 3", cnpj: "34.567.890/0001-22", category: "Serviços", size: "Pequena" },
-            { name: "Indústria Exemplo 4", cnpj: "45.678.901/0001-33", category: "Indústria", size: "Média" },
-            { name: "Comércio Exemplo 5", cnpj: "56.789.012/0001-44", category: "Comércio", size: "Grande" },
-            { name: "Serviços Exemplo 6", cnpj: "67.890.123/0001-55", category: "Serviços", size: "Pequena" },
-            { name: "Indústria Exemplo 7", cnpj: "78.901.234/0001-66", category: "Indústria", size: "Grande" },
-            { name: "Comércio Exemplo 8", cnpj: "89.012.345/0001-77", category: "Comércio", size: "Média" }
-        ];
+        // Atualizar a variável companies com os dados do PHP
+        const companies = <?php echo json_encode($companies); ?>;
 
         let currentPage = 1;
         const itemsPerPage = 5;

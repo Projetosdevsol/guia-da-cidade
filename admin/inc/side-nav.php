@@ -47,6 +47,12 @@
 					</a>
 				</li>
 				<li>
+					<a href="companies.php">
+						<i class="fa fa-building" aria-hidden="true"></i>
+						<span>Companies</span>
+					</a>
+				</li>
+				<li>
 					<a href="#">
 						<i class="fa fa-cog" aria-hidden="true"></i>
 						<span>Setting</span>

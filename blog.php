@@ -29,6 +29,17 @@ $notFound = 0;
         } 
         ?>
     </title>
+    <style>
+        body {
+            color: black;
+        }
+        .card-text, .card-title, p, h1, h5 {
+            color: black !important;
+        }
+        .list-group-item:not(.active) {
+            color: black !important;
+        }
+    </style>
     
     <!-- Links de estilos e bibliotecas -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -57,7 +68,7 @@ $notFound = 0;
     // Recupera as categorias para exibição na barra lateral
     $categories = get5Categoies($conn); 
     ?>
-
+  
     <!-- Carrosel -->
     <?php include 'inc/carrossel.php'; ?>   
 
@@ -166,24 +177,77 @@ $notFound = 0;
             </main>
             <?php } ?>
 
-            <!-- Barra lateral de categorias -->
+              <!-- Substitui toda a seção da barra lateral (aside) -->
             <aside class="aside-main">
-                <div class="list-group category-aside">
-                    <a href="#" 
-                       class="list-group-item list-group-item-action active" 
-                       aria-current="true">
-                        Category
-                    </a>
-                    <?php foreach ($categories as $category) { ?>
-                    <a href="category.php?category_id=<?=$category['id']?>" 
-                       class="list-group-item list-group-item-action">
-                        <?php echo $category['category']; ?>
-                    </a>
-                    <?php } ?>
+                <!-- Primeiro Card de Anúncio -->
+                <div class="card mb-4">
+                    <div id="carouselAd1" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="ads/ad1-1.jpg" class="d-block w-100" alt="Anúncio 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="ads/ad1-2.jpg" class="d-block w-100" alt="Anúncio 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="ads/ad1-3.jpg" class="d-block w-100" alt="Anúncio 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segundo Card de Anúncio -->
+                <div class="card mb-4">
+                    <div id="carouselAd2" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="ads/ad2-1.jpg" class="d-block w-100" alt="Anúncio 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="ads/ad2-2.jpg" class="d-block w-100" alt="Anúncio 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="ads/ad2-3.jpg" class="d-block w-100" alt="Anúncio 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terceiro Card de Anúncio -->
+                <div class="card mb-4">
+                    <div id="carouselAd3" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="ads/ad3-1.jpg" class="d-block w-100" alt="Anúncio 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="ads/ad3-2.jpg" class="d-block w-100" alt="Anúncio 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="ads/ad3-3.jpg" class="d-block w-100" alt="Anúncio 3">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </aside>
-        </section>
-    </div>
+
+
+
+    <!-- Adicione este script antes do fechamento do body -->
+    <script>
+        // Configura os carrosséis
+        document.addEventListener('DOMContentLoaded', function() {
+            const carouselOptions = {
+                interval: 3000, // Tempo em milissegundos para cada transição
+                ride: 'carousel',
+                wrap: true
+            };
+
+            new bootstrap.Carousel(document.getElementById('carouselAd1'), carouselOptions);
+            new bootstrap.Carousel(document.getElementById('carouselAd2'), carouselOptions);
+            new bootstrap.Carousel(document.getElementById('carouselAd3'), carouselOptions);
+        });
+    </script>
 
     <!-- Scripts para funcionalidades da página -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -209,8 +273,9 @@ $notFound = 0;
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
-    <!-- Rodapé -->
-    <?php include 'inc/rodape.php'; ?>
+   
 
 </body>
+ <!-- Rodapé -->
+ <?php include 'inc/rodape.php'; ?>
 </html>
