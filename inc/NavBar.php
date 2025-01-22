@@ -30,7 +30,7 @@
 	        <li class="nav-item">
 	          <a class="nav-link" 
 	             href="category.php">
-	             Category</a>
+	             Categorias</a>
 	        </li>
 	         <?php 
                if ($logged) {
@@ -55,7 +55,7 @@
                } else {
 	         ?>
 	         <li class="nav-item">
-	          <a class="nav-link" href="login.php">Login | Cadastro</a>
+	          <a class="nav-link" href="login.php">Entrar</a>
 	        </li>
 	         <?php 
                }
@@ -68,12 +68,12 @@
 	        <input class="form-control me-2" 
 	               type="search"
 	               name="search" 
-	               placeholder="Search" 
+	               placeholder="Pesquisar" 
 	               aria-label="Search">
 
 	        <button class="btn btn-outline-success" 
 	                type="submit">
-	                Search</button>
+	                Pesquisar</button>
 	      </form>
 	    </div>
 	  </div>

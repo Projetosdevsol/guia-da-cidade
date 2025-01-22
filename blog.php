@@ -39,6 +39,191 @@ $notFound = 0;
         .list-group-item:not(.active) {
             color: black !important;
         }
+        /* Seção de anúncios */
+        .ad-section {
+            margin: 30px 0;
+            width: 100%;
+        }
+
+        /* Banner principal */
+        .ad-banner {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+            background: #f8f8f8;
+            border: 1px solid #eee;
+        }
+
+        .ad-banner img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        /* Grid de anúncios */
+        .ad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ad-item {
+            position: relative;
+            background: #f8f8f8;
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+        }
+
+        .ad-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .ad-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        /* Label de publicidade */
+        .ad-label {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 2px 6px;
+            font-size: 11px;
+            border-radius: 3px;
+            z-index: 1;
+        }
+
+        .ad-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .ad-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ad-banner img {
+                height: 120px;
+            }
+            
+            .ad-item img {
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ad-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ad-banner img {
+                height: 100px;
+            }
+        }
+
+        /* Separador */
+        .ad-section::before,
+        .ad-section::after {
+            content: '';
+            display: block;
+            height: 1px;
+            background: #eee;
+            margin: 20px 0;
+        }
+
+        /* Layout grid principal */
+        .main-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px; /* Conteúdo principal e sidebar */
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Coluna dos posts */
+        .blog-posts {
+            max-width: 650px;
+        }
+
+        /* Sidebar de anúncios */
+        .ads-sidebar {
+            position: sticky;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Cards de anúncio */
+        .ad-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+            height: 250px;
+        }
+
+        .ad-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s;
+        }
+
+        .ad-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Label de publicidade */
+        .ad-label {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1;
+        }
+
+        .ad-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .main-content-grid {
+                grid-template-columns: 1fr 250px;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ads-sidebar {
+                display: none; /* Oculta anúncios em telas menores */
+            }
+            
+            .blog-posts {
+                max-width: 100%;
+            }
+        }
     </style>
     
     <!-- Links de estilos e bibliotecas -->
@@ -76,162 +261,107 @@ $notFound = 0;
     <?php include 'inc/hero.php'; ?>   
 
     <!-- Conteúdo principal da página -->
-    <div class="container mt-5">
-        <section class="d-flex">
-            
-            <!-- Verifica se há posts disponíveis -->
-            <?php if ($posts != 0) { ?>
-            <main class="main-blog">
-                <!-- Exibe título da seção -->
-                <h1 class="display-4 mb-4 fs-3">
-                    <?php 
-                    if (isset($_GET['search'])) { 
-                        echo "Search <b>'".htmlspecialchars($_GET['search'])."'</b>"; 
-                    }
-                    ?>
-                </h1>
-
-                <!-- Lista de posts -->
-                <?php foreach ($posts as $post) { ?>
-                <div class="card main-blog-card mb-5">
-                    <!-- Imagem do post -->
-                    <img src="upload/blog/<?=$post['cover_url']?>" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <!-- Título do post -->
-                        <h5 class="card-title"><?=$post['post_title']?></h5>
-                        
-                        <!-- Resumo do texto do post -->
-                        <?php 
-                        $p = strip_tags($post['post_text']); 
-                        $p = substr($p, 0, 200);               
+    <div class="container">
+        <!-- Container principal com grid -->
+        <div class="main-content-grid">
+            <!-- Coluna dos posts -->
+            <div class="blog-posts">
+                <?php 
+                if ($posts != 0) {
+                    $post_count = 0;
+                    foreach ($posts as $post) {
+                        // Exibe o post
                         ?>
-                        <p class="card-text"><?=$p?>...</p>
-
-                        <!-- Botão para ler mais -->
-                        <a href="blog-view.php?post_id=<?=$post['post_id']?>" class="btn btn-primary">Read more</a>
+                        <article class="blog-post-card">
+                            <div class="post-image">
+                                <img src="upload/blog/<?=$post['cover_url']?>" alt="<?=$post['post_title']?>">
+                            </div>
+                            <div class="post-content">
+                                <h3 class="post-title"><?=$post['post_title']?></h3>
+                                <p class="post-excerpt">
+                                    <?=substr(strip_tags($post['post_text']), 0, 100)?>...
+                                </p>
+                                <div class="post-meta">
+                                    <div class="interactions">
+                                        <span><i class="fa fa-thumbs-up"></i> <?=likeCountByPostID($conn, $post['post_id'])?></span>
+                                        <span><i class="fa fa-comment"></i> <?=CountByPostID($conn, $post['post_id'])?></span>
+                                    </div>
+                                    <a href="blog-view.php?post_id=<?=$post['post_id']?>" class="read-more">Ler mais</a>
+                                </div>
+                            </div>
+                        </article>
+                        <?php
+                        $post_count++;
                         
-                        <hr>
-                        <!-- Área de curtidas e comentários -->
-                        <div class="d-flex justify-content-between">
-                            <div class="react-btns">
-                                <?php 
-                                $post_id = $post['post_id'];
-                                if ($logged) { // Se o usuário estiver logado
-                                    $liked = isLikedByUserID($conn, $post_id, $user_id); // Verifica se o post foi curtido
-                                    
-                                    if ($liked) { ?>
-                                        <!-- Ícone de curtida ativo -->
-                                        <i class="fa fa-thumbs-up liked like-btn" 
-                                           post-id="<?=$post_id?>"
-                                           liked="1"
-                                           aria-hidden="true"></i>
-                                    <?php } else { ?>
-                                        <!-- Ícone de curtida inativo -->
-                                        <i class="fa fa-thumbs-up like like-btn"
-                                           post-id="<?=$post_id?>"
-                                           liked="0"
-                                           aria-hidden="true"></i>
-                                    <?php } 
-                                } else { ?>
-                                    <!-- Ícone de curtida para usuários não logados -->
-                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                <?php } ?>
-
-                                <!-- Contador de curtidas -->
-                                Likes (
-                                <span>
-                                    <?php 
-                                    echo likeCountByPostID($conn, $post['post_id']); 
-                                    ?>
-                                </span>
-                                )
-
-                                <!-- Link para comentários -->
-                                <a href="blog-view.php?post_id=<?=$post['post_id']?>#comments">    
-                                    <i class="fa fa-comment" aria-hidden="true"></i> Comments (
-                                    <?php 
-                                    echo CountByPostID($conn, $post['post_id']); 
-                                    ?>
-                                    )
-                                </a>	
-                            </div>	
-                            <small class="text-body-secondary"><?=$post['crated_at']?></small>
-                        </div>
+                        // Insere anúncio após cada 3 posts
+                        if ($post_count % 3 === 0) {
+                            ?>
+                            <div class="ad-section">
+                                <!-- Anúncio horizontal grande -->
+                                <div class="ad-banner">
+                                    <span class="ad-label">Publicidade</span>
+                                    <a href="#" class="ad-link">
+                                        <img src="path/to/ad-banner.jpg" alt="Anúncio">
+                                    </a>
+                                </div>
+                                
+                                <!-- Grid de anúncios menores -->
+                                <div class="ad-grid">
+                                    <div class="ad-item">
+                                        <span class="ad-label">Publicidade</span>
+                                        <a href="#" class="ad-link">
+                                            <img src="path/to/ad1.jpg" alt="Anúncio">
+                                        </a>
+                                    </div>
+                                    <div class="ad-item">
+                                        <span class="ad-label">Publicidade</span>
+                                        <a href="#" class="ad-link">
+                                            <img src="path/to/ad2.jpg" alt="Anúncio">
+                                        </a>
+                                    </div>
+                                    <div class="ad-item">
+                                        <span class="ad-label">Publicidade</span>
+                                        <a href="#" class="ad-link">
+                                            <img src="path/to/ad3.jpg" alt="Anúncio">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                } else { ?>
+                    <div class="no-posts">
+                        <p>Nenhum post encontrado</p>
                     </div>
-                </div>
                 <?php } ?>
-            </main>
-            <?php } else { ?>
-            <!-- Exibição de mensagens caso não haja posts -->
-            <main class="main-blog p-2">
-                <?php if ($notFound) { ?>
-                <div class="alert alert-warning"> 
-                    No search results found 
-                    <?php echo " - <b>key = '".htmlspecialchars($_GET['search'])."'</b>" ?>
-                </div>
-                <?php } else { ?>
-                <div class="alert alert-warning"> 
-                    No posts yet.
-                </div>
-                <?php } ?>
-            </main>
-            <?php } ?>
+            </div>
 
-              <!-- Substitui toda a seção da barra lateral (aside) -->
-            <aside class="aside-main">
-                <!-- Primeiro Card de Anúncio -->
-                <div class="card mb-4">
-                    <div id="carouselAd1" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="ads/ad1-1.jpg" class="d-block w-100" alt="Anúncio 1">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="ads/ad1-2.jpg" class="d-block w-100" alt="Anúncio 2">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="ads/ad1-3.jpg" class="d-block w-100" alt="Anúncio 3">
-                            </div>
-                        </div>
-                    </div>
+            <!-- Coluna de anúncios lateral -->
+            <aside class="ads-sidebar">
+                <div class="ad-card">
+                    <span class="ad-label">Publicidade</span>
+                    <a href="#" class="ad-link">
+                        <img src="path/to/ad1.jpg" alt="Anúncio">
+                    </a>
                 </div>
-
-                <!-- Segundo Card de Anúncio -->
-                <div class="card mb-4">
-                    <div id="carouselAd2" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="ads/ad2-1.jpg" class="d-block w-100" alt="Anúncio 1">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="ads/ad2-2.jpg" class="d-block w-100" alt="Anúncio 2">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="ads/ad2-3.jpg" class="d-block w-100" alt="Anúncio 3">
-                            </div>
-                        </div>
-                    </div>
+                
+                <div class="ad-card">
+                    <span class="ad-label">Publicidade</span>
+                    <a href="#" class="ad-link">
+                        <img src="path/to/ad2.jpg" alt="Anúncio">
+                    </a>
                 </div>
-
-                <!-- Terceiro Card de Anúncio -->
-                <div class="card mb-4">
-                    <div id="carouselAd3" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="ads/ad3-1.jpg" class="d-block w-100" alt="Anúncio 1">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="ads/ad3-2.jpg" class="d-block w-100" alt="Anúncio 2">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="ads/ad3-3.jpg" class="d-block w-100" alt="Anúncio 3">
-                            </div>
-                        </div>
-                    </div>
+                
+                <div class="ad-card">
+                    <span class="ad-label">Publicidade</span>
+                    <a href="#" class="ad-link">
+                        <img src="path/to/ad3.jpg" alt="Anúncio">
+                    </a>
                 </div>
             </aside>
-
-
+        </div>
+    </div>
 
     <!-- Adicione este script antes do fechamento do body -->
     <script>
@@ -272,8 +402,6 @@ $notFound = 0;
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-
-   
 
 </body>
  <!-- Rodapé -->
