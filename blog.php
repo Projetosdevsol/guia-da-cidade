@@ -32,6 +32,9 @@ $notFound = 0;
     <style>
         body {
             color: black;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding-top: 80px; /* Espaço para a navbar fixa */
         }
         .card-text, .card-title, p, h1, h5 {
             color: black !important;
@@ -139,35 +142,51 @@ $notFound = 0;
             margin: 20px 0;
         }
 
+        .main-content {
+            padding: 30px 0;
+        }
+
         /* Layout grid principal */
         .main-content-grid {
             display: grid;
-            grid-template-columns: 1fr 300px; /* Conteúdo principal e sidebar */
+            grid-template-columns: 1fr 300px;
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         /* Coluna dos posts */
         .blog-posts {
-            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .blog-post-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .blog-post-card:hover {
+            transform: translateY(-5px);
         }
 
         /* Sidebar de anúncios */
         .ads-sidebar {
             position: sticky;
-            top: 20px;
+            top: 110px; /* 80px da navbar + 30px de espaço */
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
-        /* Cards de anúncio */
         .ad-card {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
             overflow: hidden;
             position: relative;
             height: 250px;
@@ -184,51 +203,49 @@ $notFound = 0;
             transform: scale(1.05);
         }
 
-        /* Label de publicidade */
         .ad-label {
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 10px;
+            left: 10px;
             background: rgba(0,0,0,0.6);
             color: white;
-            padding: 2px 8px;
+            padding: 4px 8px;
             border-radius: 4px;
             font-size: 12px;
             z-index: 1;
         }
 
-        .ad-link {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
         /* Responsividade */
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .main-content-grid {
-                grid-template-columns: 1fr 250px;
-                gap: 20px;
+                padding: 0 20px;
             }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 991px) {
             .main-content-grid {
                 grid-template-columns: 1fr;
             }
             
             .ads-sidebar {
-                display: none; /* Oculta anúncios em telas menores */
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 0;
             }
             
-            .blog-posts {
-                max-width: 100%;
+            .main-content-grid {
+                padding: 0 15px;
             }
         }
     </style>
     
     <!-- Links de estilos e bibliotecas -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -261,105 +278,107 @@ $notFound = 0;
     <?php include 'inc/hero.php'; ?>   
 
     <!-- Conteúdo principal da página -->
-    <div class="container">
-        <!-- Container principal com grid -->
-        <div class="main-content-grid">
-            <!-- Coluna dos posts -->
-            <div class="blog-posts">
-                <?php 
-                if ($posts != 0) {
-                    $post_count = 0;
-                    foreach ($posts as $post) {
-                        // Exibe o post
-                        ?>
-                        <article class="blog-post-card">
-                            <div class="post-image">
-                                <img src="upload/blog/<?=$post['cover_url']?>" alt="<?=$post['post_title']?>">
-                            </div>
-                            <div class="post-content">
-                                <h3 class="post-title"><?=$post['post_title']?></h3>
-                                <p class="post-excerpt">
-                                    <?=substr(strip_tags($post['post_text']), 0, 100)?>...
-                                </p>
-                                <div class="post-meta">
-                                    <div class="interactions">
-                                        <span><i class="fa fa-thumbs-up"></i> <?=likeCountByPostID($conn, $post['post_id'])?></span>
-                                        <span><i class="fa fa-comment"></i> <?=CountByPostID($conn, $post['post_id'])?></span>
-                                    </div>
-                                    <a href="blog-view.php?post_id=<?=$post['post_id']?>" class="read-more">Ler mais</a>
-                                </div>
-                            </div>
-                        </article>
-                        <?php
-                        $post_count++;
-                        
-                        // Insere anúncio após cada 3 posts
-                        if ($post_count % 3 === 0) {
+    <div class="main-content">
+        <div class="container">
+            <!-- Container principal com grid -->
+            <div class="main-content-grid">
+                <!-- Coluna dos posts -->
+                <div class="blog-posts">
+                    <?php 
+                    if ($posts != 0) {
+                        $post_count = 0;
+                        foreach ($posts as $post) {
+                            // Exibe o post
                             ?>
-                            <div class="ad-section">
-                                <!-- Anúncio horizontal grande -->
-                                <div class="ad-banner">
-                                    <span class="ad-label">Publicidade</span>
-                                    <a href="#" class="ad-link">
-                                        <img src="path/to/ad-banner.jpg" alt="Anúncio">
-                                    </a>
+                            <article class="blog-post-card">
+                                <div class="post-image">
+                                    <img src="upload/blog/<?=$post['cover_url']?>" alt="<?=$post['post_title']?>">
                                 </div>
-                                
-                                <!-- Grid de anúncios menores -->
-                                <div class="ad-grid">
-                                    <div class="ad-item">
-                                        <span class="ad-label">Publicidade</span>
-                                        <a href="#" class="ad-link">
-                                            <img src="path/to/ad1.jpg" alt="Anúncio">
-                                        </a>
-                                    </div>
-                                    <div class="ad-item">
-                                        <span class="ad-label">Publicidade</span>
-                                        <a href="#" class="ad-link">
-                                            <img src="path/to/ad2.jpg" alt="Anúncio">
-                                        </a>
-                                    </div>
-                                    <div class="ad-item">
-                                        <span class="ad-label">Publicidade</span>
-                                        <a href="#" class="ad-link">
-                                            <img src="path/to/ad3.jpg" alt="Anúncio">
-                                        </a>
+                                <div class="post-content">
+                                    <h3 class="post-title"><?=$post['post_title']?></h3>
+                                    <p class="post-excerpt">
+                                        <?=substr(strip_tags($post['post_text']), 0, 100)?>...
+                                    </p>
+                                    <div class="post-meta">
+                                        <div class="interactions">
+                                            <span><i class="fa fa-thumbs-up"></i> <?=likeCountByPostID($conn, $post['post_id'])?></span>
+                                            <span><i class="fa fa-comment"></i> <?=CountByPostID($conn, $post['post_id'])?></span>
+                                        </div>
+                                        <a href="blog-view.php?post_id=<?=$post['post_id']?>" class="read-more">Ler mais</a>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                             <?php
+                            $post_count++;
+                            
+                            // Insere anúncio após cada 3 posts
+                            if ($post_count % 3 === 0) {
+                                ?>
+                                <div class="ad-section">
+                                    <!-- Anúncio horizontal grande -->
+                                    <div class="ad-banner">
+                                        <span class="ad-label">Publicidade</span>
+                                        <a href="#" class="ad-link">
+                                            <img src="path/to/ad-banner.jpg" alt="Anúncio">
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Grid de anúncios menores -->
+                                    <div class="ad-grid">
+                                        <div class="ad-item">
+                                            <span class="ad-label">Publicidade</span>
+                                            <a href="#" class="ad-link">
+                                                <img src="path/to/ad1.jpg" alt="Anúncio">
+                                            </a>
+                                        </div>
+                                        <div class="ad-item">
+                                            <span class="ad-label">Publicidade</span>
+                                            <a href="#" class="ad-link">
+                                                <img src="path/to/ad2.jpg" alt="Anúncio">
+                                            </a>
+                                        </div>
+                                        <div class="ad-item">
+                                            <span class="ad-label">Publicidade</span>
+                                            <a href="#" class="ad-link">
+                                                <img src="path/to/ad3.jpg" alt="Anúncio">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                            }
                         }
-                    }
-                } else { ?>
-                    <div class="no-posts">
-                        <p>Nenhum post encontrado</p>
-                    </div>
-                <?php } ?>
-            </div>
+                    } else { ?>
+                        <div class="no-posts">
+                            <p>Nenhum post encontrado</p>
+                        </div>
+                    <?php } ?>
+                </div>
 
-            <!-- Coluna de anúncios lateral -->
-            <aside class="ads-sidebar">
-                <div class="ad-card">
-                    <span class="ad-label">Publicidade</span>
-                    <a href="#" class="ad-link">
-                        <img src="path/to/ad1.jpg" alt="Anúncio">
-                    </a>
-                </div>
-                
-                <div class="ad-card">
-                    <span class="ad-label">Publicidade</span>
-                    <a href="#" class="ad-link">
-                        <img src="path/to/ad2.jpg" alt="Anúncio">
-                    </a>
-                </div>
-                
-                <div class="ad-card">
-                    <span class="ad-label">Publicidade</span>
-                    <a href="#" class="ad-link">
-                        <img src="path/to/ad3.jpg" alt="Anúncio">
-                    </a>
-                </div>
-            </aside>
+                <!-- Coluna de anúncios lateral -->
+                <aside class="ads-sidebar">
+                    <div class="ad-card">
+                        <span class="ad-label">Publicidade</span>
+                        <a href="#" class="ad-link">
+                            <img src="path/to/ad1.jpg" alt="Anúncio">
+                        </a>
+                    </div>
+                    
+                    <div class="ad-card">
+                        <span class="ad-label">Publicidade</span>
+                        <a href="#" class="ad-link">
+                            <img src="path/to/ad2.jpg" alt="Anúncio">
+                        </a>
+                    </div>
+                    
+                    <div class="ad-card">
+                        <span class="ad-label">Publicidade</span>
+                        <a href="#" class="ad-link">
+                            <img src="path/to/ad3.jpg" alt="Anúncio">
+                        </a>
+                    </div>
+                </aside>
+            </div>
         </div>
     </div>
 
@@ -401,7 +420,7 @@ $notFound = 0;
             });
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
  <!-- Rodapé -->

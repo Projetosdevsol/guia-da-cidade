@@ -1,3 +1,9 @@
+<?php 
+$pageTitle = 'Cadastro - ArujáGuia';
+include 'inc/header.php';
+include 'inc/NavBar.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,3 +61,5 @@
     </div>
 </body>
 </html>
+
+<?php include 'inc/footer.php'; ?>

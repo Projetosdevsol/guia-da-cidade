@@ -1,0 +1,179 @@
+/* Estilos fixos da NavBar */
+.fixed-navbar {
+    background: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    height: 80px;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    font-size: 26px;
+    font-weight: 700;
+    color: #333;
+    padding: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.brand-highlight {
+    color: #0d6efd;
+}
+
+.navbar > .container {
+    height: 80px;
+}
+
+.navbar-collapse {
+    height: 80px;
+    align-items: center;
+}
+
+/* Links principais */
+.navbar-nav .nav-link {
+    color: #555;
+    font-size: 15px;
+    padding: 10px 16px;
+    margin: 0 2px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #0d6efd;
+    background: #f0f4ff;
+}
+
+.navbar-nav .nav-link i {
+    margin-right: 6px;
+}
+
+/* Busca */
+.search-form {
+    width: 300px;
+    margin: 0 20px;
+}
+
+.search-form .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px 0 0 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.search-form .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: none;
+}
+
+.btn-search {
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Dropdown */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 200px;
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.dropdown-item:hover {
+    background: #f0f4ff;
+    color: #0d6efd;
+}
+
+.dropdown-item i {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+/* Botão de login */
+.login-btn {
+    background: #0d6efd;
+    color: white !important;
+    padding: 8px 24px !important;
+    border-radius: 8px;
+    margin-left: 10px;
+    font-weight: 500;
+    border: none;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.2);
+}
+
+.login-btn:hover {
+    background: linear-gradient(45deg, #0143a3, #0d6efd) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.login-btn i {
+    margin-right: 6px;
+}
+
+/* Menu do usuário */
+.user-menu {
+    font-weight: 500;
+}
+
+/* Mobile */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        height: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        position: absolute;
+        top: 80px;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+
+    .navbar-toggler {
+        height: 44px;
+    }
+
+    .search-form {
+        width: 100%;
+        margin: 15px 0;
+        height: 44px;
+    }
+
+    .login-btn {
+        margin: 10px 0;
+        text-align: center;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Ajuste global para todas as páginas */
+body {
+    padding-top: 80px; /* Espaço para a navbar fixa */
+} 
