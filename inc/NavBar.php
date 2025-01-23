@@ -1,94 +1,30 @@
-<nav class="navbar navbar-expand-lg fixed-navbar">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand" href="blog.php">
-            <b>Arujá<span class="brand-highlight">Guia</span></b>
-        </a>
-
-        <!-- Botão mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-            <i class="fas fa-bars"></i>
+        <a class="navbar-brand" href="blog.php">ArujáGuia</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-
-        <!-- Menu principal -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Links principais -->
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="blog.php">
-                        <i class="fas fa-home"></i> Início
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="category.php">
-                        <i class="fas fa-newspaper"></i> Notícias
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="empresas.php">
-                        <i class="fas fa-store"></i> Comércio
-                    </a>
-                </li>
-            </ul>
-
-            <!-- Busca -->
-            <form class="d-flex search-form" role="search" method="GET" action="blog.php">
-                <div class="input-group">
-                    <input class="form-control" type="search" name="search" placeholder="Buscar no site...">
-                    <button class="btn btn-search" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </form>
-
-            <!-- Menu do usuário -->
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-bs-toggle="dropdown">
-                        <i class="fas fa-compass"></i> Serviços
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="https://www.prefeituradearuja.sp.gov.br/">
-                                <i class="fas fa-building"></i> Prefeitura
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="https://www.arujatransporte.com.br/">
-                                <i class="fas fa-bus"></i> Transporte
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="https://servicosonline.prefeituradearuja.sp.gov.br/servicosonline/arujaemprega/">
-                                <i class="fas fa-briefcase"></i> Empregos
-                            </a>
-                        </li>
-                    </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="blog.php">Início</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="sobre.php">Sobre</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="empresas.php">Empresas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.php">Contato</a>
+                </li>
                 <?php if ($logged) { ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link user-menu" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> <?=$_SESSION['username']?>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="profile.php">
-                                    <i class="fas fa-user"></i> Perfil
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="logout.php">
-                                    <i class="fas fa-sign-out-alt"></i> Sair
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Sair</a>
                     </li>
                 <?php } else { ?>
                     <li class="nav-item">
-                        <a class="nav-link login-btn" href="login.php">
-                            <i class="fas fa-sign-in-alt"></i> Entrar
-                        </a>
+                        <a class="nav-link" href="login.php">Entrar</a>
                     </li>
                 <?php } ?>
             </ul>
@@ -97,6 +33,29 @@
 </nav>
 
 <style>
+body {
+    padding-top: 56px; /* Espaço para a navbar fixa */
+}
+
+.navbar {
+    height: 56px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #333;
+}
+
+.nav-link {
+    color: #555;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #0d6efd;
+}
+
 .fixed-navbar {
     background: white;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);

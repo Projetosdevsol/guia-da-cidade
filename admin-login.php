@@ -128,63 +128,42 @@
 	</style>
 </head>
 <body>
-	<div class="login-container d-flex align-items-center min-vh-100">
+<div class="login-container d-flex align-items-center min-vh-100">
 		<div class="login-card w-100">
 			<div class="login-header">
 				<i class="fas fa-user-shield admin-icon"></i>
 				<h1 class="login-title">Admin Login</h1>
 				<p class="text-muted">Acesso restrito a administradores</p>
 			</div>
+    	
+    	<form class="shadow w-450 p-3" 
+    	      action="admin/admin-login.php" 
+    	      method="post">
 
-			<form action="php/admin-login.php" method="post">
-				<?php if(isset($_GET['error'])){ ?>
-					<div class="alert alert-danger" role="alert">
-						<i class="fas fa-exclamation-circle me-2"></i>
-						<?php echo htmlspecialchars($_GET['error']); ?>
-					</div>
-				<?php } ?>
+    		<?php if(isset($_GET['error'])){ ?>
+    		<div class="alert alert-danger" role="alert">
+			  <?php echo htmlspecialchars($_GET['error']); ?>
+			</div>
+		    <?php } ?>
 
-				<div class="mb-4">
-					<label class="form-label">Nome de usuário</label>
-					<div class="input-group">
-						<span class="input-group-text">
-							<i class="fas fa-user text-muted"></i>
-						</span>
-						<input type="text" 
-							   class="form-control"
-							   name="uname"
-							   value="<?php echo (isset($_GET['uname']))? htmlspecialchars($_GET['uname']):"" ?>"
-							   placeholder="Digite seu usuário admin">
-					</div>
-				</div>
+		  <div class="mb-3">
+		    <label class="form-label">Nome de usuário</label>
+		    <input type="text" 
+		           class="form-control"
+		           name="uname"
+		           value="<?php echo (isset($_GET['uname']))? htmlspecialchars($_GET['uname']):"" ?>">
+		  </div>
 
-				<div class="mb-4">
-					<label class="form-label">Senha</label>
-					<div class="input-group">
-						<span class="input-group-text">
-							<i class="fas fa-lock text-muted"></i>
-						</span>
-						<input type="password" 
-							   class="form-control"
-							   name="pass"
-							   placeholder="Digite sua senha admin">
-					</div>
-				</div>
-
-				<button type="submit" class="btn btn-danger btn-login">
-					Entrar como Admin
-				</button>
-
-				<div class="login-footer">
-					<a href="login.php">
-						<i class="fas fa-user me-1"></i>Login Normal
-					</a>
-					<a href="blog.php">
-						<i class="fas fa-newspaper me-1"></i>Blog
-					</a>
-				</div>
-			</form>
-		</div>
-	</div>
+		  <div class="mb-3">
+		    <label class="form-label">Senha</label>
+		    <input type="password" 
+		           class="form-control"
+		           name="pass">
+		  </div>
+		  
+		  <button type="submit" class="btn btn-primary">Login</button>
+		  <a href="login.php" class="link-secondary">Login de usuário</a>
+		</form>
+    </div>
 </body>
 </html>

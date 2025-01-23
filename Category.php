@@ -45,7 +45,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
  <div class="container mt-5">
  <h1 class="display-4 mb-4 fs-3">
  			<?php if ($category != 0)
- 			  echo "Articles about '".$category['category']."'";  
+ 			  echo "Noticias sobre '".$category['category']."'";  
  			else echo "Articles"; ?>
  	
 </h1>
@@ -124,7 +124,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
   	<?php }else {?> 
   		<main class="main-blog p-2">
 	  		<div class="alert alert-warning">
-	  			No posts yet.
+	  			Nenhuma noticia encontrada.
 	  		</div>
   	    </main>
   	<?php } } ?>
@@ -133,7 +133,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 			  <a href="#" 
 			     class="list-group-item list-group-item-action active" 
 			     aria-current="true">
-			    Category
+			    Categorias
 			  </a>
 			  <?php foreach ($categories5 as $category ) { ?>
 			  <a href="category.php?category_id=<?=$category['id']?>" 

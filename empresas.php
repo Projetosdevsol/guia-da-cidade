@@ -2,6 +2,8 @@
 // Inicia a sessão para verificar informações do usuário logado
 session_start();
 include "db_conn.php";
+include_once("admin/data/Post.php");
+include_once("admin/data/Comment.php");
 
 $logged = false; // Variável para indicar se o usuário está logado
 
@@ -29,6 +31,7 @@ $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Empresas de Arujá</title>
     <!-- Importando o Bootstrap para estilização -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -92,9 +95,9 @@ $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Barra de Navegação Dinâmica -->
     <?php include 'inc/NavBar.php'; ?>
 
-    <div class="container">
+    <div class="container my-5">
         <!-- Seção de Filtros -->
-        <div class="filter-section">
+        <div class="filter-section mb-4">
             <h3>Empresas em Arujá</h3>
             <p>Encontre informações sobre empresas na cidade de Arujá, com filtros por nome, categoria e porte.</p>
 
@@ -125,25 +128,27 @@ $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <!-- Tabela de Empresas -->
-        <table class="table table-bordered" id="companyTable">
-            <thead>
-                <tr>
-                    <!-- Títulos das colunas da tabela -->
-                    <th>Nome da Empresa</th>
-                    <th>CNPJ</th>
-                    <th>Categoria</th>
-                    <th>Porte</th>
-                    <th>Informações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- As empresas serão inseridas aqui dinamicamente -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="companyTable">
+                <thead>
+                    <tr>
+                        <!-- Títulos das colunas da tabela -->
+                        <th>Nome da Empresa</th>
+                        <th>CNPJ</th>
+                        <th>Categoria</th>
+                        <th>Porte</th>
+                        <th>Informações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- As empresas serão inseridas aqui dinamicamente -->
+                </tbody>
+            </table>
+        </div>
 
         <!-- Paginação: Navegação entre as páginas -->
         <nav>
-            <ul class="pagination" id="pagination"></ul>
+            <ul class="pagination justify-content-center" id="pagination"></ul>
         </nav>
     </div>
     
@@ -227,7 +232,7 @@ $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
         applyFilters();
     </script>
 
-    
+    <?php include 'inc/footer.php'; ?>
 </body>
 
 </html>

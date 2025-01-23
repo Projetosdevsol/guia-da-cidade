@@ -11,6 +11,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 
 // Variável para indicar se resultados de busca não foram encontrados
 $notFound = 0;
+
+// Redireciona para blog.php
+header("Location: blog.php");
+exit(); // Importante para garantir que o código pare de executar após o redirecionamento
 ?>
 <!DOCTYPE html>
 <html lang="en">

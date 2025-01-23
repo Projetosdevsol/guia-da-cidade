@@ -119,7 +119,7 @@ $notFound = 0;
     </main>
 
     <!-- Rodapé -->
-    <?php include 'inc/rodape.php';?>
+    <?php include 'inc/footer.php';?>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
