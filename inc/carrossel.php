@@ -26,7 +26,13 @@
             <img src="https://media.licdn.com/dms/image/v2/C4E1BAQHxTYuGcZASuQ/company-background_10000/company-background_10000/0/1643897213758/solution_sp_cover?e=2147483647&v=beta&t=6V_b8W8shL2n31wAcivY2ry7qC_J1ZsTHbrlPmgX5vA" class="d-block w-100" alt="Slide 2">
         </div>
         <div class="carousel-item">
-            <img src="https://revistadestaquemais.com.br/wp-content/uploads/2018/12/hiperCubo-1.jpg" class="d-block w-100" alt="Slide 3">
+            <img src="https://scontent.fgru6-1.fna.fbcdn.net/v/t39.30808-6/406471989_883600686548990_5934107011310279550_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=107&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=9AowtgvewEoQ7kNvgGU6LEl&_nc_zt=23&_nc_ht=scontent.fgru6-1.fna&_nc_gid=AoCJ-v5kx88iGGQoIJvsdKJ&oh=00_AYC2r3ykRfT3LbLyRpBM4-D7en9Kj-p8yB0eCnbirqXdfQ&oe=67998DD2" class="d-block w-100" alt="Slide 3">
+        </div>
+        <div class="carousel-item">
+            <img src="https://tecnoportas.com.br/wp-content/uploads/2025/01/BANNER-SITE-TECNOPORTAS-JAN-2025.jpg.webp" class="d-block w-100" alt="Slide 3">
+        </div>
+        <div class="carousel-item">
+            <img src="https://scontent.fgru6-1.fna.fbcdn.net/v/t39.30808-6/299378394_378540077774508_2255666488932574634_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=QDSjmleZKvUQ7kNvgFHIHxx&_nc_zt=23&_nc_ht=scontent.fgru6-1.fna&_nc_gid=API5Pef6KPg9HMXgeySr8e1&oh=00_AYCIEpct_2EX4TrUqOhcZkOWFzs_2AsVW640ZPElQbm5dA&oe=67998573" class="d-block w-100" alt="Slide 3">
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">

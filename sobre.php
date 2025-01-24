@@ -22,18 +22,9 @@ $notFound = 0;
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilo do Cabeçalho */
-        header nav a {
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        header nav a:hover {
-            color: #007bff;
-        }
-
-        /* Hero Section */
+        /* Remova qualquer estilo que afete a navbar e mantenha apenas os específicos da página */
         .hero {
+            margin-top: 60px; /* Ajustado para considerar a altura fixa da navbar */
             background-image: url('https://i.ytimg.com/vi/kqs78nQVHg0/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGFYgXyhlMA8=&rs=AOn4CLDfQQbklcDUoYfk6WI6j4SI3gsB2Q');
             background-size: cover;
             background-position: center;

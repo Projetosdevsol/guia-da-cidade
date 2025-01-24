@@ -156,3 +156,11 @@ function deleteById($conn, $id){
    	 return 0;
    }
 }
+
+function getPostCountByCategory($conn, $category_id) {
+    $sql = "SELECT COUNT(*) as count FROM posts WHERE category_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$category_id]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['count'];
+}
