@@ -6,7 +6,7 @@ if (isset($_SESSION['admin_id']) && isset($_SESSION['username'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard - Companies</title>
+    <title>Dashboard - Empresas</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/side-bar.css">
@@ -35,8 +35,8 @@ if (isset($_SESSION['admin_id']) && isset($_SESSION['username'])) {
     ?>
                
      <div class="main-table">
-        <h3 class="mb-3">All Companies 
-            <a href="company-add.php" class="btn btn-success">Add New</a></h3>
+        <h3 class="mb-3">Todas as Empresas 
+            <a href="company-add.php" class="btn btn-success">Adicionar</a></h3>
         <?php if (isset($_GET['error'])) { ?>    
         <div class="alert alert-warning">
             <?=htmlspecialchars($_GET['error'])?>

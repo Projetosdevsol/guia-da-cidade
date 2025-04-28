@@ -1,12 +1,12 @@
 <?php 
 session_start();
 
-if (isset($_SESSION['admin_id']) && isset($_SESSION['username']) && $_GET['id']) {
+if (isset($_SESSION['admin_id']) && isset($_SESSION['username'])) {
  ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Dashboard - Category Edit</title>
+	<title>Dashboard - Categorias</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 	<link rel="stylesheet" href="../css/side-bar.css">
@@ -15,24 +15,13 @@ if (isset($_SESSION['admin_id']) && isset($_SESSION['username']) && $_GET['id'])
 <body>
 	<?php 
       $key = "hhdsfs1263z";
-      $id = $_GET['id'];
 	  include "inc/side-nav.php"; 
-      include_once("data/Category.php");
-      include_once("../db_conn.php");
-      $categoryx = getById($conn, $id);
-
-      if (isset($_GET['category'])) {
-      	$category = $_GET['category'];
-      }else {
-      	$category = $categoryx['category'];
-      	$category_id = $categoryx['id'];
-      }
 
 	?>
                
 	 <div class="main-table">
-	 	<h3 class="mb-3">Edit
-	 		<a href="Category.php" class="btn btn-success">Category</a></h3>
+	 	<h3 class="mb-3">Criar nova Categoria
+	 		<a href="Category.php" class="btn btn-success">Categoria</a></h3>
 	 	<?php if (isset($_GET['error'])) { ?>	
 	 	<div class="alert alert-warning">
 			<?=htmlspecialchars($_GET['error'])?>
@@ -45,23 +34,17 @@ if (isset($_SESSION['admin_id']) && isset($_SESSION['username']) && $_GET['id'])
 		</div>
 	    <?php } ?>
         <form class="shadow p-3" 
-    	      action="req/Category-edit.php" 
+    	      action="req/Category-create.php" 
     	      method="post">
 
 		  <div class="mb-3">
-		    <label class="form-label">Category</label>
+		    <label class="form-label">Categoria</label>
 		    <input type="text" 
 		           class="form-control"
-		           name="category"
-		           value="<?=$category?>">
-		    <input type="text" 
-		           class="form-control"
-		           name="id"
-		           value="<?=$category_id?>"
-		           hidden>
+		           name="category">
 		  </div>
 		  
-		  <button type="submit" class="btn btn-primary">Create</button>
+		  <button type="submit" class="btn btn-primary">Criar</button>
 		</form>
 	 	
 	 </div>

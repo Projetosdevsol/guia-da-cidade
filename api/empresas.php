@@ -127,24 +127,24 @@ $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
-        <!-- Tabela de Empresas -->
-        <div class="table-responsive">
-            <table class="table table-bordered" id="companyTable">
-                <thead>
-                    <tr>
-                        <!-- Títulos das colunas da tabela -->
-                        <th>Nome da Empresa</th>
-                        <th>CNPJ</th>
-                        <th>Categoria</th>
-                        <th>Porte</th>
-                        <th>Informações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- As empresas serão inseridas aqui dinamicamente -->
-                </tbody>
-            </table>
-        </div>
+       <!-- Tabela de Empresas -->
+<div class="table-responsive">
+    <table class="table table-bordered" id="companyTable">
+        <thead>
+            <tr>
+                <!-- Títulos das colunas da tabela -->
+                <th>Nome da Empresa</th>
+                <th>CNPJ</th>
+                <th>Categoria</th>
+                <th>Porte</th>
+                <th>Informações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- As empresas serão inseridas aqui dinamicamente -->
+        </tbody>
+    </table>
+</div>
 
         <!-- Paginação: Navegação entre as páginas -->
         <nav>
@@ -162,23 +162,24 @@ $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
         let currentPage = 1;
         const itemsPerPage = 5;
 
-        // Exibe a lista de empresas com base na página atual
-        function displayCompanies(companiesToDisplay) {
-            const tableBody = document.getElementById('companyTable').querySelector('tbody');
-            tableBody.innerHTML = '';
-
-            companiesToDisplay.forEach(company => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="company-name">${company.name}</td>
-                    <td>${company.cnpj}</td>
-                    <td>${company.category}</td>
-                    <td>${company.size}</td>
-                    <td><a href="#" class="details-btn">Ver Detalhes</a></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
+      // Exibe a lista de empresas com base na página atual
+function displayCompanies(companiesToDisplay) {
+    const tableBody = document.getElementById('companyTable').querySelector('tbody');
+    tableBody.innerHTML = '';
+    companiesToDisplay.forEach(company => {
+        const row = document.createElement('tr');
+        // Verifica se o campo 'website' existe e não está vazio
+        const websiteLink = company.website ? `<a href="${company.website}" target="_blank" class="details-btn">Ver Detalhes</a>` : 'Sem link disponível';
+        row.innerHTML = `
+            <td class="company-name">${company.name}</td>
+            <td>${company.cnpj}</td>
+            <td>${company.category}</td>
+            <td>${company.size}</td>
+            <td>${websiteLink}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
 
         // Exibe a navegação de páginas
         function setupPagination(totalItems) {

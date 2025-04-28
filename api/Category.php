@@ -69,7 +69,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
  <h1 class="display-4 mb-4 fs-3">
  			<?php if ($category != 0)
  			  echo "Noticias sobre '".$category['category']."'";  
- 			else echo "Articles"; ?>
+ 			else echo "Principais Categorias"; ?>
  	
 </h1>
   
