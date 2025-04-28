@@ -1,7 +1,7 @@
 <?php 
 
-$sName = "mysql://root:ckHWhRZIxHJEDlenalzhFFhTCWGTnoNv@mysql.railway.internal:3306/railway";
-$uName = "railway";
+$sName = "mysql://root:ckHWhRZIxHJEDlenalzhFFhTCWGTnoNv@yamabiko.proxy.rlwy.net:29688/railway";
+$uName = "root";
 $pass = "ckHWhRZIxHJEDlenalzhFFhTCWGTnoNv";
 $db_name = "railway";
 
