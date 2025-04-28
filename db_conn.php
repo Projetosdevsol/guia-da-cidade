@@ -1,9 +1,9 @@
 <?php 
 
-$sName = "mysql://root:ckHWhRZIxHJEDlenalzhFFhTCWGTnoNv@yamabiko.proxy.rlwy.net:29688/railway";
-$uName = "root";
-$pass = "ckHWhRZIxHJEDlenalzhFFhTCWGTnoNv";
-$db_name = "railway";
+$sName = getenv("DB_HOST");
+$uName = getenv("DB_USER");
+$pass = getenv("DB_PASS");
+$db_name = getenv("DB_NAME");
 
 try {
     $conn = new PDO("mysql:host=$sName;dbname=$db_name", 
@@ -12,3 +12,4 @@ try {
 }catch(PDOException $e){
   echo "Connection failed : ". $e->getMessage();
 }
+?>
