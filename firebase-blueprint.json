@@ -1,0 +1,92 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "standard"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["username", "email", "role", "createdAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Blog/News post",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "content": { "type": "string" },
+        "coverImageURL": { "type": "string", "format": "uri" },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "categoryId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "slug", "content", "status", "categoryId", "authorId", "createdAt"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Post category",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "slug": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["name", "slug"]
+    },
+    "Company": {
+      "title": "Company",
+      "description": "Business directory entry",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "taxId": { "type": "string" },
+        "category": { "type": "string" },
+        "size": { "type": "string", "enum": ["small", "medium", "large"] },
+        "description": { "type": "string" },
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "website": { "type": "string", "format": "uri" },
+        "logoURL": { "type": "string", "format": "uri" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "taxId", "category", "size", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "User comment on a post",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "userId": { "type": "string" },
+        "postId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["text", "userId", "postId", "createdAt"]
+    },
+    "Like": {
+      "title": "Like",
+      "description": "User like on a post",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "postId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "postId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/posts/{postId}": { "schema": "Post", "description": "Blog posts" },
+    "/categories/{categoryId}": { "schema": "Category", "description": "Post categories" },
+    "/companies/{companyId}": { "schema": "Company", "description": "Business directory" },
+    "/comments/{commentId}": { "schema": "Comment", "description": "Post comments" },
+    "/likes/{likeId}": { "schema": "Like", "description": "Post likes" }
+  }
+}

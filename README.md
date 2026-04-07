@@ -1,24 +1,20 @@
-# How to Create a Blog PHP & MySQL database
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-## PHP Blogging Website
+# Run and deploy your AI Studio app
 
+This contains everything you need to run your app locally.
 
-version: 1.0.0
+View your app in AI Studio: https://ai.studio/apps/e2bdd799-3cba-4774-b7b0-37db86efd29b
 
-## TECHNOLOGIES
+## Run Locally
 
-1. PHP
-1. HTML & CSS
-1. JQuery AJAX
-1. Javascript
-1. Bootstrap 5
-
+**Prerequisites:**  Node.js
 
 
-## Full Tutorial
-
-[On Youtube](https://www.youtube.com/playlist?list=PL2WFgdVk-usFBEBfk6TVrlHyyaFg0Z1Kg)
-
-## Authors
-
-[Elias Abdurrahman](https://github.com/codingWithElias)
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
