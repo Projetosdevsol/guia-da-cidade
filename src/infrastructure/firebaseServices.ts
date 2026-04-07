@@ -53,13 +53,16 @@ export const AuditLogService = {
   async logAction(action: string, userId: string, targetId?: string, details?: string) {
     const path = 'audit_logs';
     try {
-      await addDoc(collection(db, path), {
+      const logData: any = {
         action,
         userId,
-        targetId,
-        details,
         createdAt: Timestamp.now()
-      });
+      };
+      
+      if (targetId !== undefined) logData.targetId = targetId;
+      if (details !== undefined) logData.details = details;
+
+      await addDoc(collection(db, path), logData);
     } catch (error) {
       console.error('Failed to log action:', error);
     }
@@ -154,12 +157,34 @@ export const PostService = {
       handleFirestoreError(error, OperationType.DELETE, path);
     }
   },
+  async getById(id: string) {
+    const path = `posts/${id}`;
+    try {
+      const docRef = doc(db, 'posts', id);
+      const snapshot = await getDoc(docRef);
+      if (snapshot.exists()) {
+        return { id: snapshot.id, ...snapshot.data(), createdAt: (snapshot.data().createdAt as Timestamp).toDate() } as Post;
+      }
+      return null;
+    } catch (error) {
+      handleFirestoreError(error, OperationType.GET, path);
+    }
+  },
+
   async getAllPublished() {
     const path = 'posts';
     try {
-      const q = query(collection(db, path), where('status', '==', 'published'), orderBy('createdAt', 'desc'));
+      // Query only with status filter to avoid composite index requirement for orderBy
+      const q = query(collection(db, path), where('status', '==', 'published'));
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), createdAt: (doc.data().createdAt as Timestamp).toDate() } as Post));
+      const posts = snapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data(), 
+        createdAt: (doc.data().createdAt as Timestamp).toDate() 
+      } as Post));
+      
+      // Sort in memory: newest first
+      return posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     } catch (error) {
       handleFirestoreError(error, OperationType.LIST, path);
     }

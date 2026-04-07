@@ -5,6 +5,7 @@ import { AlertTriangle } from 'lucide-react';
 import { AuthProvider, useAuth } from './presentation/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Home } from './pages/Home';
+import { PostDetail } from './pages/PostDetail';
 import { Directory } from './pages/Directory';
 import { Admin } from './pages/Admin';
 import { LoginPage } from './pages/LoginPage';
@@ -46,6 +47,14 @@ const AnimatedRoutes = () => {
           element={
             <PageTransition>
               <Home />
+            </PageTransition>
+          } 
+        />
+        <Route 
+          path="/post/:id" 
+          element={
+            <PageTransition>
+              <PostDetail />
             </PageTransition>
           } 
         />

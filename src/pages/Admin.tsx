@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../presentation/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Newspaper, Building2, Users, Plus, Database, Shield, User as UserIcon, History, Settings as SettingsIcon, Ban, Trash2, Save, AlertTriangle, ExternalLink } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Building2, Users, Plus, X, Database, Shield, User as UserIcon, History, Settings as SettingsIcon, Ban, Trash2, Save, AlertTriangle, ExternalLink } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { cn } from '../lib/utils';
-import { UserService, AuditLogService, SettingsService } from '../infrastructure/firebaseServices';
-import { User, AuditLog, SystemSettings } from '../domain/entities';
+import { UserService, AuditLogService, SettingsService, PostService, CategoryService } from '../infrastructure/firebaseServices';
+import { User, AuditLog, SystemSettings, Post, Category } from '../domain/entities';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
 export const Admin: React.FC = () => {
@@ -15,14 +15,27 @@ export const Admin: React.FC = () => {
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [logs, setLogs] = useState<AuditLog[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [settings, setSettings] = useState<SystemSettings | null>(null);
   const [statsData, setStatsData] = useState({ totalUsers: 0, totalPosts: 0, totalCompanies: 0 });
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'content' | 'logs' | 'settings'>('overview');
+  
+  // Modal State
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [newPost, setNewPost] = useState({
+    title: '',
+    content: '',
+    coverImageURL: '',
+    categoryId: '',
+    status: 'published' as Post['status']
+  });
 
   useEffect(() => {
     if (user?.role === 'admin') {
       if (activeTab === 'overview') loadOverview();
       if (activeTab === 'users') loadUsers();
+      if (activeTab === 'content') loadContent();
       if (activeTab === 'logs') loadLogs();
       if (activeTab === 'settings') loadSettings();
     }
@@ -47,6 +60,18 @@ export const Admin: React.FC = () => {
   const loadUsers = async () => {
     const allUsers = await UserService.getAllUsers();
     if (allUsers) setUsers(allUsers);
+  };
+
+  const loadContent = async () => {
+    const allPosts = await PostService.getAllPublished();
+    const allCats = await CategoryService.getAll();
+    if (allPosts) setPosts(allPosts);
+    if (allCats) {
+      setCategories(allCats);
+      if (allCats.length > 0 && !newPost.categoryId) {
+        setNewPost(prev => ({ ...prev, categoryId: allCats[0].id }));
+      }
+    }
   };
 
   const loadLogs = async () => {
@@ -108,6 +133,29 @@ export const Admin: React.FC = () => {
       setStatus({ type: 'success', message: 'Configurações salvas com sucesso!' });
     } catch (error) {
       setStatus({ type: 'error', message: 'Erro ao salvar configurações.' });
+    }
+  };
+
+  const handleCreatePost = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    
+    try {
+      const slug = newPost.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      
+      await PostService.create({
+        ...newPost,
+        slug,
+        authorId: user.id,
+        createdAt: new Date()
+      });
+      
+      setIsPostModalOpen(false);
+      setNewPost({ title: '', content: '', coverImageURL: '', categoryId: categories[0]?.id || '', status: 'published' });
+      setStatus({ type: 'success', message: 'Notícia publicada com sucesso!' });
+      loadContent();
+    } catch (error) {
+      setStatus({ type: 'error', message: 'Erro ao publicar notícia.' });
     }
   };
 
@@ -199,7 +247,10 @@ export const Admin: React.FC = () => {
             <Database className="h-4 w-4" />
             Semear Dados
           </button>
-          <button className="flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-2.5 text-xs font-bold tracking-widest uppercase text-white transition-all hover:bg-blue-600 hover:shadow-lg active:scale-95">
+          <button 
+            onClick={() => setIsPostModalOpen(true)}
+            className="flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-2.5 text-xs font-bold tracking-widest uppercase text-white transition-all hover:bg-blue-600 hover:shadow-lg active:scale-95"
+          >
             <Plus className="h-4 w-4" />
             Nova Notícia
           </button>
@@ -507,10 +558,152 @@ export const Admin: React.FC = () => {
       )}
 
       {activeTab === 'content' && (
-        <div className="flex h-64 flex-col items-center justify-center rounded-[2rem] border border-dashed border-slate-200 text-center">
-          <Newspaper className="mb-4 h-12 w-12 text-slate-200" />
-          <p className="text-sm font-bold text-slate-900">Gerenciamento de Conteúdo</p>
-          <p className="mt-1 text-xs text-slate-400">Em breve: Edição e moderação de posts.</p>
+        <section className="rounded-[2rem] border border-slate-100 bg-white p-10 shadow-sm">
+          <div className="mb-8 flex items-center justify-between">
+            <h2 className="text-xl font-black tracking-tight text-slate-900">Gerenciamento de Conteúdo</h2>
+            <button 
+              onClick={() => setIsPostModalOpen(true)}
+              className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold tracking-widest uppercase text-white transition-all hover:bg-blue-700 active:scale-95"
+            >
+              <Plus className="h-4 w-4" />
+              Nova Notícia
+            </button>
+          </div>
+          
+          <div className="grid gap-6">
+            {posts.map((post) => (
+              <div key={post.id} className="flex items-center justify-between rounded-2xl border border-slate-50 p-4 transition-colors hover:bg-slate-50/50">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 overflow-hidden rounded-lg bg-slate-100">
+                    <img src={post.coverImageURL} alt="" className="h-full w-full object-cover" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">{post.title}</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                      {post.status === 'published' ? 'Publicado' : 'Rascunho'} • {post.createdAt.toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button className="h-8 w-8 rounded-full bg-slate-50 text-slate-400 transition-colors hover:bg-blue-50 hover:text-blue-600">
+                    <Save className="h-4 w-4" />
+                  </button>
+                  <button 
+                    onClick={() => PostService.delete(post.id).then(loadContent)}
+                    className="h-8 w-8 rounded-full bg-slate-50 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+            {posts.length === 0 && (
+              <div className="flex h-48 flex-col items-center justify-center text-center text-slate-400">
+                <Newspaper className="mb-4 h-12 w-12 opacity-20" />
+                <p className="text-sm font-bold">Nenhuma notícia encontrada.</p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* New Post Modal */}
+      {isPostModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-2xl rounded-[2.5rem] bg-white p-10 shadow-2xl">
+            <div className="mb-8 flex items-center justify-between">
+              <h2 className="text-2xl font-black tracking-tight text-slate-900">Criar Nova Notícia</h2>
+              <button 
+                onClick={() => setIsPostModalOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-slate-100"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreatePost} className="space-y-6">
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">Título</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={newPost.title}
+                    onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+                    placeholder="Ex: Nova ciclovia inaugurada..."
+                    className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">Categoria</label>
+                  <select 
+                    required
+                    value={newPost.categoryId}
+                    onChange={(e) => setNewPost({ ...newPost, categoryId: e.target.value })}
+                    className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium outline-none focus:border-blue-500"
+                  >
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">Status</label>
+                  <select 
+                    required
+                    value={newPost.status}
+                    onChange={(e) => setNewPost({ ...newPost, status: e.target.value as any })}
+                    className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium outline-none focus:border-blue-500"
+                  >
+                    <option value="published">Publicado</option>
+                    <option value="draft">Rascunho</option>
+                  </select>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">URL da Imagem de Capa</label>
+                  <input 
+                    required
+                    type="url" 
+                    value={newPost.coverImageURL}
+                    onChange={(e) => setNewPost({ ...newPost, coverImageURL: e.target.value })}
+                    placeholder="https://exemplo.com/imagem.jpg"
+                    className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">Conteúdo</label>
+                  <textarea 
+                    required
+                    rows={6}
+                    value={newPost.content}
+                    onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                    placeholder="Escreva o corpo da notícia aqui..."
+                    className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-4 pt-4">
+                <button 
+                  type="button"
+                  onClick={() => setIsPostModalOpen(false)}
+                  className="rounded-xl px-6 py-3 text-xs font-bold tracking-widest uppercase text-slate-400 hover:text-slate-600"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="submit"
+                  className="rounded-xl bg-blue-600 px-8 py-3 text-xs font-bold tracking-widest uppercase text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-95"
+                >
+                  Publicar Notícia
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

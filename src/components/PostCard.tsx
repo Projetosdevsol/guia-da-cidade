@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Post } from '../domain/entities';
 import { AuditLogService } from '../infrastructure/firebaseServices';
 import { useAuth } from '../presentation/AuthContext';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, MessageCircle, Share2, Check } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Check, ImageIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 interface PostCardProps {
   post: Post;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+// Using React.memo to prevent unnecessary re-renders in lists
+export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
   const { user } = useAuth();
   const [copied, setCopied] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handleShare = async () => {
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const url = `${window.location.origin}/post/${post.id}`;
     try {
       await navigator.clipboard.writeText(url);
@@ -30,18 +35,35 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
   return (
     <motion.article 
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className="group flex flex-col gap-4"
     >
-      <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100">
+      <Link 
+        to={`/post/${post.id}`} 
+        className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100"
+      >
+        {/* Low-quality placeholder / Loading state */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-slate-50 text-slate-200">
+            <ImageIcon className="h-8 w-8 animate-pulse" />
+          </div>
+        )}
+        
         <img 
           src={post.coverImageURL || `https://picsum.photos/seed/${post.id}/800/500`} 
           alt={post.title}
+          loading="lazy" // Native lazy loading for performance
+          onLoad={() => setImageLoaded(true)}
           referrerPolicy="no-referrer"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className={cn(
+            "h-full w-full object-cover transition-all duration-700 group-hover:scale-105",
+            imageLoaded ? "opacity-100 blur-0" : "opacity-0 blur-lg"
+          )}
         />
+        
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           <span className="badge-label bg-white/90 text-slate-900 shadow-sm backdrop-blur-sm">
             Notícia
@@ -51,7 +73,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             <span className="text-[10px] font-bold uppercase tracking-tighter">{format(post.createdAt, "MMM", { locale: ptBR })}</span>
           </div>
         </div>
-      </div>
+      </Link>
       
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3 text-[10px] font-bold tracking-widest uppercase text-slate-400">
@@ -60,9 +82,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <span>5 min de leitura</span>
         </div>
         
-        <h3 className="text-xl font-bold leading-tight text-slate-900 transition-colors group-hover:text-blue-600 sm:text-2xl">
-          {post.title}
-        </h3>
+        <Link to={`/post/${post.id}`}>
+          <h3 className="text-xl font-bold leading-tight text-slate-900 transition-colors group-hover:text-blue-600 sm:text-2xl">
+            {post.title}
+          </h3>
+        </Link>
         
         <p className="line-clamp-2 text-sm leading-relaxed text-slate-500">
           {post.content}
@@ -109,11 +133,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               </span>
             </button>
           </div>
-          <button className="ml-auto text-xs font-bold tracking-widest uppercase text-slate-900 transition-colors hover:text-blue-600">
+          <Link to={`/post/${post.id}`} className="ml-auto text-xs font-bold tracking-widest uppercase text-slate-900 transition-colors hover:text-blue-600">
             Ler mais
-          </button>
+          </Link>
         </div>
       </div>
     </motion.article>
   );
-};
+});
